@@ -72,16 +72,19 @@
             }
         }
         if(!processed && instructions[instructions.length-1] !== name ){
-            let a = setInterval( beep, 100 )
-                setTimeout(() => clearInterval(a),1000)
-                fetch('backend',{
-                    method:'post',
-                    body:JSON.stringify({
-                        instructions:instructions,
-                    })
+//            let a = setInterval( beep, 100 )
+//                 setTimeout(() => clearInterval(a),1000)
+                 fetch('backend.php',{
+                     method:'post',
+                     body:JSON.stringify({
+                         instructions:instructions,
+                     })
+                 })
+                .then(response  => response.json())
+                .then(data      => {
+                    speak(data.text)
+                    if(data.clear) noteTextarea.value = ''
                 })
-                .then(response => response.json())
-                .then(data => speak(data.text)
         }
 
     }
