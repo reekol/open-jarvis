@@ -3,29 +3,31 @@
 <textarea id="note-textarea" ></textarea>
 <script>
     var name = 'Jarvis'
+        name = name.toLowerCase()
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     var recognition = new SpeechRecognition()
     var noteTextarea = document.getElementById('note-textarea')
-    var hardCmd = {
-            jarvis_weather:          () => speakRemote(
-                                                'https://weather-broker-cdn.api.bbci.co.uk/en/forecast/aggregated/727011',
-                                                (data) => { 
-                                                    let report = data.forecasts[0].detailed.reports[0]
-                                                    return 'Current condtion is ' + [
-                                                            report.feelsLikeTemperatureC + ' degree celsius',
-                                                            report.weatherTypeText,
-                                                            report.windDescription,
-                                                            'visibility is ' + report.visibility,
-                                                        ].join(', ')
-                                                }
-                                            ),
-            jarvis_question:         () => speak('What doyou want to ask?'),
-            jarvis_status:           () => speak('Tree servers are offline.'),
-            what_time_is_it:         () => speak((new Date()).toString().substring(0,21)),
-            thank_you:               () => speak('You are wellcome!'),
-            'jarvis_f***_off':       () => speak('You are a piece of shit!'),
-            wake_me_up_in_5_minutes: () => speak('Gonna wake you up in five minutes!'),
-        }
+    var hardCmd = { }
+            hardCmd["what's_your_name"]         = () => speak('My name is ' + name)
+            hardCmd[`${name}_weather`]          = () => speakRemote(
+                                                            'https://weather-broker-cdn.api.bbci.co.uk/en/forecast/aggregated/727011',
+                                                            (data) => { 
+                                                                    let report = data.forecasts[0].detailed.reports[0]
+                                                                    return 'Current condtion is ' + [
+                                                                            report.feelsLikeTemperatureC + ' degree celsius',
+                                                                            report.weatherTypeText,
+                                                                            report.windDescription,
+                                                                            'visibility is ' + report.visibility,
+                                                                        ].join(', ')
+                                                                }
+                                                        )
+            hardCmd[`${name}_question`]         = () => speak('What doyou want to ask?')
+            hardCmd[`${name}_clear`]            = () => { speak('Cache cleared ...'); noteTextarea.value = '' }
+            hardCmd[`what_time_is_it`]          = () => speak((new Date()).toString().substring(0,21))
+            hardCmd[`thank_you`]                = () => speak('You are wellcome!')
+            hardCmd[`${name}_f***_off`]         = () => speak('You are a piece of shit!')
+            hardCmd[`wake_me_up_in_5_minutes`]  = () => speak('Gonna wake you up in five minutes!')
+
        recognition.continuous = true
 
     let start = () => { try{ recognition.start() }catch(e){ console.log(e.message) } }
@@ -69,10 +71,9 @@
                     processed = true
             }
         }
-        if(!processed){
-//             fetch('https://weather-broker-cdn.api.bbci.co.uk/en/forecast/aggregated/727011')
-//                 .then(response => response.json())
-//                 .then(data => speak(data.forecasts[0].detailed.reports[0].enhancedWeatherDescription) })
+        if(!processed && instructions.pop() !== name ){
+            let a = setInterval( beep, 100 )
+                setTimeout(() => clearInterval(a),1000)
         }
 
     }
@@ -86,5 +87,3 @@
 </script>
 </body>
 </html>
-
-
