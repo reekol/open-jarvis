@@ -50,6 +50,7 @@
                     hardCmd[`${name}_question`]         = () => speak('What doyou want to ask?')
                     hardCmd[`${name}_clear`]            = () => { speak('Cache cleared ...'); noteTextarea.value = '' }
                     hardCmd[`what_time_is_it`]          = () => speak((new Date()).toString().substring(0,21))
+                    hardCmd[`${name}_time`]             = () => speak((new Date()).toString().substring(16,21))
                     hardCmd[`thank_you`]                = () => speak('You are wellcome!')
                     hardCmd[`${name}_f***_off`]         = () => speak('You are a piece of shit!')
                     hardCmd[`wake_me_up_in_5_minutes`]  = () => speak('Gonna wake you up in five minutes!')
