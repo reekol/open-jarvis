@@ -91,6 +91,7 @@
                         ssu.rate = 1
                         ssu.pitch = 1
                         if(message.length) ssu.onend = () => { speak(message) }
+                        console.log(ssu.text)
                         ss.speak(ssu)
                 }
             let speakRemote = (url,cb) => {
