@@ -48,7 +48,7 @@
                                                                                 ].join(', ')
                                                                         }
                                                                 )
-                    hardCmd[`${name}_wiki`]          = (instructions) => speakRemote(
+                    hardCmd[`${name}_wiki`]             = (instructions) => speakRemote(
                                                                     'https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=' + instructions[2] + '&origin=*',
                                                                     (data) => { return getFirstKey(data.query.pages).extract } )
                     hardCmd[`${name}_question`]         = () => speak('What doyou want to ask?')
