@@ -33,6 +33,7 @@
             var recognition = new SpeechRecognition()
             var noteTextarea = document.getElementById('question-textarea')
             var answerTextarea = document.getElementById('answer-textarea')
+            var getFirstKey   = (ob) => ob[Object.keys(ob)[0]]
             var hardCmd = { }
                     hardCmd["what's_your_name"]         = () => speak('My name is ' + name)
                     hardCmd[`${name}_weather`]          = () => speakRemote(
@@ -47,6 +48,9 @@
                                                                                 ].join(', ')
                                                                         }
                                                                 )
+                    hardCmd[`${name}_wiki`]          = (instructions) => speakRemote(
+                                                                    'https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=' + instructions[2] + '&origin=*',
+                                                                    (data) => { return getFirstKey(data.query.pages).extract } )
                     hardCmd[`${name}_question`]         = () => speak('What doyou want to ask?')
                     hardCmd[`${name}_clear`]            = () => { speak('Cache cleared ...'); noteTextarea.value = '' }
                     hardCmd[`what_time_is_it`]          = () => speak((new Date()).toString().substring(0,21))
@@ -94,7 +98,7 @@
                 for(let hc of Object.keys(hardCmd)){
                     if(hardSentance.indexOf(hc) > -1 && typeof hardCmd[hc] !== 'undefined'){
                         let cb = hardCmd[hc]
-                            cb()
+                            cb(instructions)
                             noteTextarea.innerText = noteTextarea.value = ' '
                             processed = true
                     }
