@@ -27,7 +27,7 @@
         <textarea id="question-textarea" class='textarr'></textarea>
         <textarea id="answer-textarea" class='textarr'></textarea>
         <script>
-            var name = 'Jarvis'
+            var name = 'Dope'
                 name = name.toLowerCase()
             var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
             var recognition = new SpeechRecognition()
@@ -57,7 +57,13 @@
                     hardCmd[`${name}_time`]             = () => speak((new Date()).toString().substring(16,21))
                     hardCmd[`thank_you`]                = () => speak('You are wellcome!')
                     hardCmd[`${name}_f***_off`]         = () => speak('You are a piece of shit!')
-                    hardCmd[`wake_me_up_in_5_minutes`]  = () => speak('Gonna wake you up in five minutes!')
+                    hardCmd[`wake_me_up_in_5_minutes`]  = () => {
+                        speak('Gonna wake you up in five minutes!')
+                        setTimeout(() => {
+                                let a = setInterval( beep, 100 )
+                                        setTimeout(() => clearInterval(a),10000)
+                            },5 * 60 * 1000)
+                    }
 
             recognition.continuous = true
 
