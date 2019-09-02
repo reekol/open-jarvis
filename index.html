@@ -34,20 +34,22 @@
             var noteTextarea = document.getElementById('question-textarea')
             var answerTextarea = document.getElementById('answer-textarea')
             var getFirstKey   = (ob) => ob[Object.keys(ob)[0]]
-            var hardCmd = { }
+            var tellWeather = () => {
+                speakRemote('https://weather-broker-cdn.api.bbci.co.uk/en/forecast/aggregated/727011',(data) => { 
+                            let report = data.forecasts[0].detailed.reports[0]
+                            return '' + [
+                                    report.feelsLikeTemperatureC + ' degree celsius',
+                                    report.weatherTypeText,
+                                    report.windDescription,
+                                    'visibility is ' + report.visibility,
+                                ].join(', ')
+                        }
+                    )}
+ 
+                var hardCmd = { }
                     hardCmd["what's_your_name"]         = () => speak('My name is ' + name)
-                    hardCmd[`${name}_weather`]          = () => speakRemote(
-                                                                    'https://weather-broker-cdn.api.bbci.co.uk/en/forecast/aggregated/727011',
-                                                                    (data) => { 
-                                                                            let report = data.forecasts[0].detailed.reports[0]
-                                                                            return '' + [
-                                                                                    report.feelsLikeTemperatureC + ' degree celsius',
-                                                                                    report.weatherTypeText,
-                                                                                    report.windDescription,
-                                                                                    'visibility is ' + report.visibility,
-                                                                                ].join(', ')
-                                                                        }
-                                                                )
+                    hardCmd[`${name}_weather`]          = tellWeather
+                    hardCmd[`what's_the_weather`]       = tellWeather
                     hardCmd[`${name}_wiki`]             = (instructions) => speakRemote(
                                                                     'https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=' + instructions[2] + '&origin=*',
                                                                     (data) => { return getFirstKey(data.query.pages).extract } )
